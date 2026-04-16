@@ -3,21 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login • Radio Santelenense</title>
+  <title>Cadastrar • Radio Santelenense</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="login-page">
   <div class="login-card">
-    <h1>Entrar</h1>
+    <h1>Cadastrar</h1>
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
     <form method="post">
       <label>Usuário</label>
       <input type="text" name="username" required>
       <label>Senha</label>
       <input type="password" name="password" required>
-      <button type="submit">Acessar</button>
+      <label>Função</label>
+      <select name="role">
+        <option value="vendedor">Vendedor</option>
+        <option value="secretaria">Secretaria</option>
+        <option value="direcao">Direção</option>
+      </select>
+      <button type="submit">Cadastrar</button>
     </form>
-    <a href="{{ url_for('register') }}">Cadastrar novo usuário</a>
+    <a href="{{ url_for('login') }}">Já tem conta? Entrar</a>
   </div>
 </body>
 </html>

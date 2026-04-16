@@ -1,4 +1,6 @@
 import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from werkzeug.security import generate_password_hash
 from app import db, app, User
 

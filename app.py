@@ -98,6 +98,20 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        role = request.form.get("role", "vendedor")
+        if User.query.filter_by(username=username).first():
+            return render_template("register.html", error="Usuário já existe")
+        user = User(username=username, password_hash=generate_password_hash(password), role=role)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for("login"))
+    return render_template("register.html")
+
 @app.route("/")
 def index():
     if not g.user:
