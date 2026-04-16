@@ -1,0 +1,86 @@
+<div class="d-flex flex-column flex-md-row gap-2 align-items-md-center justify-content-between">
+  <div>
+    <div class="h5 mb-0">Faturas</div>
+    <div class="text-secondary small">Controle de vencimentos e pagamentos</div>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-danger" id="btnNovaFatura">
+      <span data-lucide="plus" class="icon"></span>
+      Nova Fatura
+    </button>
+  </div>
+</div>
+
+<div class="card card-saas mt-3">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped mb-0">
+        <thead>
+          <tr>
+            <th>Contrato</th>
+            <th>Cliente</th>
+            <th>Vendedor</th>
+            <th>Vencimento</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Forma</th>
+            <th class="text-end d-none" id="faturasAcoesTh">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="faturasTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalFatura" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content rounded-4 border-0">
+      <div class="modal-header">
+        <div>
+          <div class="h5 mb-0" id="faturaModalTitle">Nova Fatura</div>
+          <div class="text-secondary small">Vinculada a um contrato</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formFatura" class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Contrato</label>
+            <select class="form-select" name="contractId" id="faturaContratoSelect" required></select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Vencimento</label>
+            <input type="date" class="form-control" name="dueDate" required />
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Valor</label>
+            <input type="number" step="0.01" class="form-control" name="valor" required />
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status" required>
+              <option value="pendente">pendente</option>
+              <option value="pago">pago</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Forma de pagamento</label>
+            <select class="form-select" name="formaPagamento" required>
+              <option value="pix">pix</option>
+              <option value="dinheiro">dinheiro</option>
+              <option value="cartao">cartão</option>
+              <option value="boleto">boleto</option>
+              <option value="cheque">cheque</option>
+            </select>
+          </div>
+        </form>
+        <div class="alert alert-danger mt-3 d-none" id="faturaErro">Não foi possível salvar.</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-danger" id="salvarFatura">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

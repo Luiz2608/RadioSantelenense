@@ -1,0 +1,58 @@
+<div class="d-flex flex-column flex-md-row gap-2 align-items-md-center justify-content-between">
+  <div>
+    <div class="h5 mb-0">Relatórios</div>
+    <div class="text-secondary small">Acesso restrito à direção</div>
+  </div>
+  <div class="d-flex gap-2 align-items-center">
+    <div class="d-flex gap-2">
+      <div>
+        <label class="form-label small text-secondary mb-1">Início</label>
+        <input type="date" class="form-control" id="relInicio" />
+      </div>
+      <div>
+        <label class="form-label small text-secondary mb-1">Fim</label>
+        <input type="date" class="form-control" id="relFim" />
+      </div>
+    </div>
+    <button class="btn btn-danger mt-4 mt-md-0" id="btnAplicarRel">Aplicar</button>
+    <button class="btn btn-outline-danger mt-4 mt-md-0" id="btnExportarCsv">
+      <span data-lucide="download" class="icon"></span>
+      CSV
+    </button>
+  </div>
+</div>
+
+<div class="row g-3 mt-1">
+  <div class="col-12 col-lg-4">
+    <div class="kpi-card p-4 h-100">
+      <div class="d-flex align-items-start justify-content-between">
+        <div>
+          <div class="text-secondary small">Total do período</div>
+          <div class="h4 mb-0" id="relTotal">—</div>
+        </div>
+        <div class="kpi-icon"><span data-lucide="line-chart" class="icon"></span></div>
+      </div>
+      <div class="text-secondary small mt-2">Baseado nas faturas do período</div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-8">
+    <div class="card card-saas h-100">
+      <div class="card-body p-4">
+        <div class="h6 mb-0">Total por vendedor</div>
+        <div class="text-secondary small">Somatório de valores no período</div>
+        <div class="table-responsive mt-3">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="relPorVendedor"></tbody>
+          </table>
+        </div>
+        <div class="text-secondary small mt-3" id="relEmpty"></div>
+      </div>
+    </div>
+  </div>
+</div>
