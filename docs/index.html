@@ -29,18 +29,19 @@
                 <label class="form-label">Senha</label>
                 <input class="form-control form-control-lg" id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
               </div>
+              <div class="mb-3 d-none" id="signupUsernameWrap">
+                <label class="form-label">Usuário (opcional)</label>
+                <input class="form-control form-control-lg" id="signupUsername" placeholder="ex: luiz" autocomplete="nickname" />
+              </div>
+              <div class="mb-3 d-none" id="signupPassword2Wrap">
+                <label class="form-label">Confirmar senha</label>
+                <input class="form-control form-control-lg" id="password2" type="password" placeholder="••••••••" autocomplete="new-password" />
+              </div>
               <div class="d-grid gap-2">
                 <button class="btn btn-danger btn-lg" id="loginBtn">Entrar</button>
-                <a class="btn btn-outline-secondary" href="./dashboard.html#/">Entrar sem login (demo)</a>
+                <button class="btn btn-outline-secondary" id="signupBtn" type="button">Cadastrar</button>
               </div>
-              <div class="mt-4 small text-secondary">
-                Contas demo:
-                <div class="mt-2">
-                  <div><span class="badge text-bg-light">admin</span> senha <span class="badge text-bg-light">admin</span> (direção)</div>
-                  <div><span class="badge text-bg-light">secretaria</span> senha <span class="badge text-bg-light">secretaria</span> (secretária)</div>
-                  <div><span class="badge text-bg-light">vendedor</span> senha <span class="badge text-bg-light">vendedor</span> (vendedor)</div>
-                </div>
-              </div>
+              <div class="mt-3 small text-secondary d-none" id="signupHint">Ao cadastrar, você poderá precisar confirmar o e-mail antes de entrar.</div>
               <div class="alert alert-danger mt-4 d-none" id="loginError">Credenciais inválidas</div>
             </div>
           </div>
@@ -52,18 +53,67 @@
     <script src="./js/mock-data.js"></script>
     <script>
       window.RS_SUPABASE_URL = "https://aohpkqyxihkyzkjwfjjm.supabase.co"
-      window.RS_SUPABASE_ANON_KEY = ""
+      window.RS_SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvaHBrcXl4aWhreXprandmamptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyOTYyMDIsImV4cCI6MjA5MTg3MjIwMn0.a6kLKOZQd7crWnZ9Z5QYWfAIEtz5XLl8X_Ac3Wk1b8g"
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./js/store.js"></script>
     <script>
       window.MockData?.ensureSeeded?.()
       const btn = document.getElementById("loginBtn")
+      const signupBtn = document.getElementById("signupBtn")
+      const signupHint = document.getElementById("signupHint")
+      const signupUsernameWrap = document.getElementById("signupUsernameWrap")
+      const signupPassword2Wrap = document.getElementById("signupPassword2Wrap")
+      let mode = "login"
+
+      function setMode(next) {
+        mode = next
+        const isSignup = mode === "signup"
+        signupBtn.textContent = isSignup ? "Voltar" : "Cadastrar"
+        signupHint.classList.toggle("d-none", !isSignup)
+        signupUsernameWrap.classList.toggle("d-none", !isSignup)
+        signupPassword2Wrap.classList.toggle("d-none", !isSignup)
+      }
+
+      setMode("login")
+
+      signupBtn.addEventListener("click", () => {
+        setMode(mode === "login" ? "signup" : "login")
+      })
+
       btn.addEventListener("click", () => {
         const username = document.getElementById("username").value.trim()
         const password = document.getElementById("password").value
+        if (mode === "signup") {
+          const password2 = document.getElementById("password2").value
+          const nick = document.getElementById("signupUsername").value.trim()
+          if (password2 !== password) {
+            document.getElementById("loginError").textContent = "As senhas não conferem"
+            document.getElementById("loginError").classList.remove("d-none")
+            return
+          }
+
+          Promise.resolve(window.StoreAuth.signup(username, password, nick)).then((res) => {
+            const ok = Boolean(res?.ok)
+            document.getElementById("loginError").classList.toggle("d-none", ok)
+            if (!ok) {
+              document.getElementById("loginError").textContent = "Não foi possível cadastrar"
+              return
+            }
+            if (res?.needsConfirmation) {
+              alert("Cadastro criado. Verifique seu e-mail para confirmar e depois entre.")
+              setMode("login")
+              return
+            }
+            window.location.href = "./dashboard.html"
+          })
+          return
+        }
+
         Promise.resolve(window.StoreAuth.login(username, password)).then((res) => {
           const ok = typeof res === "boolean" ? res : Boolean(res?.ok)
+          document.getElementById("loginError").textContent = "Credenciais inválidas"
           document.getElementById("loginError").classList.toggle("d-none", ok)
           if (ok) window.location.href = "./dashboard.html"
         })

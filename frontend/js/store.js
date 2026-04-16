@@ -1,6 +1,15 @@
 ;(function () {
   const SUPABASE_URL = window.RS_SUPABASE_URL || ""
-  const SUPABASE_ANON_KEY = window.RS_SUPABASE_ANON_KEY || ""
+  const SUPABASE_ANON_KEY_FROM_WINDOW = window.RS_SUPABASE_ANON_KEY || ""
+  const SUPABASE_ANON_KEY_FROM_STORAGE = localStorage.getItem("rs.supabase.anonKey") || ""
+  let SUPABASE_ANON_KEY = SUPABASE_ANON_KEY_FROM_WINDOW || SUPABASE_ANON_KEY_FROM_STORAGE
+  if (SUPABASE_URL && !SUPABASE_ANON_KEY) {
+    const key = (window.prompt("Cole a Supabase anon key para ativar o banco de dados:") || "").trim()
+    if (key) {
+      SUPABASE_ANON_KEY = key
+      localStorage.setItem("rs.supabase.anonKey", SUPABASE_ANON_KEY)
+    }
+  }
   const hasSupabase = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase?.createClient)
 
   const KEYS = {
@@ -202,6 +211,13 @@
       const res = await supabaseClient.auth.signInWithPassword({ email, password })
       if (res.error) return { ok: false, error: res.error }
       return { ok: true, error: null }
+    },
+    async signup(email, password, username) {
+      const options = username ? { data: { username } } : {}
+      const res = await supabaseClient.auth.signUp({ email, password, options })
+      if (res.error) return { ok: false, error: res.error, needsConfirmation: false }
+      const needsConfirmation = !res.data?.session
+      return { ok: true, error: null, needsConfirmation }
     },
     async logout() {
       await supabaseClient.auth.signOut()
