@@ -128,7 +128,26 @@
 
   async function ensureAuth() {
     if ((window.Store?.mode || "local") === "supabase") {
-      await Store.init()
+      try {
+        await Store.init()
+      } catch {
+        const root = document.getElementById("pageRoot")
+        if (root) {
+          root.innerHTML = `<div class="alert alert-danger">
+            Seu usuário entrou, mas o banco bloqueou o acesso. Geralmente isso acontece quando as políticas (RLS) não foram criadas no Supabase ou seu perfil está como vendedor sem vínculo.
+            <div class="mt-2">Ações rápidas:</div>
+            <ul class="mb-0">
+              <li>No Supabase, tabela <strong>profiles</strong>: defina seu <strong>role</strong> como <strong>direcao</strong> (ou <strong>secretaria</strong>).</li>
+              <li>Execute o SQL de criação de tabelas + RLS.</li>
+              <li>Se seu perfil for <strong>vendedor</strong>, crie um registro em <strong>vendedores</strong> e vincule <strong>profile_id</strong> ao seu usuário.</li>
+            </ul>
+          </div>`
+        } else {
+          alert("Seu usuário entrou, mas o banco bloqueou o acesso. Verifique RLS/role no Supabase.")
+        }
+        await Promise.resolve(StoreAuth.logout())
+        return false
+      }
       const current = Store.currentUser?.() || null
       if (!current) {
         const url = window.location.href

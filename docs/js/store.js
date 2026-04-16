@@ -370,15 +370,22 @@
       faturas: [],
     },
     _currentUser: null,
+    lastError: null,
     mode: "supabase",
     auth: StoreAuthSupabase,
     currentUser() {
       return StoreSupabase._currentUser
     },
     async init() {
-      StoreSupabase._currentUser = await StoreAuthSupabase.getCurrent()
-      if (!StoreSupabase._currentUser) return
-      await StoreSupabase.refreshAll()
+      try {
+        StoreSupabase.lastError = null
+        StoreSupabase._currentUser = await StoreAuthSupabase.getCurrent()
+        if (!StoreSupabase._currentUser) return
+        await StoreSupabase.refreshAll()
+      } catch (e) {
+        StoreSupabase.lastError = e
+        throw e
+      }
     },
     async refreshAll() {
       const clientesRes = await supabaseClient.from("clientes").select("*").order("id", { ascending: true })
