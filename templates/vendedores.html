@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="list-header">
+  <h2>Vendedores</h2>
+  {% if g.user.role in ['secretaria','direcao'] %}
+  <a class="btn" href="{{ url_for('vendedores_novo') }}">Novo Vendedor</a>
+  {% endif %}
+  </div>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>CPF</th>
+      <th>Usuário vinculado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for v in vendedores %}
+    <tr>
+      <td>{{ v.nome }}</td>
+      <td>{{ v.cpf }}</td>
+      <td>{{ v.user.username if v.user else '-' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+{% endblock %}

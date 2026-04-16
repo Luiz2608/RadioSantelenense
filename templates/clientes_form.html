@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Novo Cliente</h2>
+<form method="post" class="form-grid">
+  <label>Razão social</label><input name="razao_social" required>
+  <label>Nome fantasia</label><input name="nome_fantasia" required>
+  <label>CNPJ</label><input name="cnpj" required>
+  <label>Inscrição estadual</label><input name="inscricao_estadual">
+  <label>Telefone</label><input name="telefone">
+  <label>Celular</label><input name="celular">
+  <label>Rua</label><input name="rua">
+  <label>Número</label><input name="numero">
+  <label>Complemento</label><input name="complemento">
+  <label>Bairro</label><input name="bairro">
+  <label>Cidade</label><input name="cidade">
+  <label>CEP</label><input name="cep">
+  <button type="submit" class="btn">Salvar</button>
+  <a href="{{ url_for('clientes') }}" class="btn secondary">Cancelar</a>
+{% endblock %}

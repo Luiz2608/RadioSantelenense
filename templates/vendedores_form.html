@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Novo Vendedor</h2>
+<form method="post" class="form-grid">
+  <label>Nome</label><input name="nome" required>
+  <label>CPF</label><input name="cpf" required>
+  <label>Vincular a usuário (opcional)</label>
+  <select name="user_link">
+    <option value="">Nenhum</option>
+    {% for u in users %}
+    <option value="{{ u.username }}">{{ u.username }} ({{ u.role }})</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn">Salvar</button>
+  <a href="{{ url_for('vendedores') }}" class="btn secondary">Cancelar</a>
+{% endblock %}

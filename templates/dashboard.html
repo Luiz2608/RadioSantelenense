@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Painel de Notificações</h2>
+<div class="cards">
+  <div class="card">
+    <h3>Contratos que vencem hoje</h3>
+    {% if contratos_hoje %}
+    <ul>
+      {% for c in contratos_hoje %}
+      <li>#{{ c.id }} • {{ c.client.nome_fantasia }} • Vendedor: {{ c.vendor.nome }} • Fim: {{ c.end_date }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty">Nenhum contrato vencendo hoje</div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>Contratos da semana</h3>
+    {% if contratos_semana %}
+    <ul>
+      {% for c in contratos_semana %}
+      <li>#{{ c.id }} • {{ c.client.nome_fantasia }} • Vendedor: {{ c.vendor.nome }} • Fim: {{ c.end_date }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty">Nenhum contrato para esta semana</div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>Contratos do mês</h3>
+    {% if contratos_mes %}
+    <ul>
+      {% for c in contratos_mes %}
+      <li>#{{ c.id }} • {{ c.client.nome_fantasia }} • Vendedor: {{ c.vendor.nome }} • Fim: {{ c.end_date }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty">Nenhum contrato para este mês</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Novo Contrato</h2>
+<form method="post" class="form-grid">
+  <label>Cliente</label>
+  <select name="cliente" required>
+    {% for c in clientes %}
+    <option value="{{ c.id }}">{{ c.nome_fantasia }}</option>
+    {% endfor %}
+  </select>
+  <label>Vendedor responsável</label>
+  <select name="vendedor" required>
+    {% for v in vendedores %}
+    <option value="{{ v.id }}">{{ v.nome }}</option>
+    {% endfor %}
+  </select>
+  <label>Data de início</label><input type="date" name="inicio" required>
+  <label>Data de término</label><input type="date" name="fim" required>
+  <label>Descrição</label><textarea name="descricao"></textarea>
+  <label>Inserções por dia</label><input type="number" name="insercoes" min="0">
+  <label>Horários de veiculação</label><input name="horarios">
+  <label>Tipo</label>
+  <select name="tipo" required>
+    <option value="permuta">permuta</option>
+    <option value="pos-pago">pós-pago</option>
+    <option value="pre-pago">pré-pago</option>
+    <option value="cheque">cheque</option>
+  </select>
+  <button type="submit" class="btn">Salvar</button>
+  <a href="{{ url_for('contratos') }}" class="btn secondary">Cancelar</a>
+{% endblock %}
